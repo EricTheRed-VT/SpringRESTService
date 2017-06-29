@@ -30,17 +30,21 @@ class BookmarkRestController {
         this.accountRepository  = ar;
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
+    @RequestMapping(method = RequestMethod.GET,
+                    produces = {MediaType.APPLICATION_JSON_VALUE,
+                                "application/hal+json"}
+                    )
     Resources<BookmarkResource> readBookmarks(@PathVariable String userId) {
         this.validateUser(userId);
 
-        List<BookmarkResource> bookmarkResourceList = bookmarkRepository
-                                                        .findByAccountUsername(userId)
-                                                        .stream()
-                                                        .map(BookmarkResource::new)
-                                                        .collect(Collectors.toList());
+        List<BookmarkResource> bmResList;
+        bmResList = bookmarkRepository
+                        .findByAccountUsername(userId)
+                        .stream()
+                        .map(BookmarkResource::new)
+                        .collect(Collectors.toList());
 
-        return new Resources<>(bookmarkResourceList);
+        return new Resources<>(bmResList);
     }
 
     @RequestMapping(method = RequestMethod.POST)
