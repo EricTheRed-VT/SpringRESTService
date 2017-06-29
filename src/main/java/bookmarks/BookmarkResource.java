@@ -2,8 +2,8 @@ package bookmarks;
 
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 /**
  * Created by eric on 6/28/17.
