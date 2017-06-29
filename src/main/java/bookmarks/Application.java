@@ -25,12 +25,12 @@ public class Application {
     @Bean
     CommandLineRunner init(AccountRepository accountRepository,
                            BookmarkRepository bookmarkRepository) {
-        return (evt) -> Arrays.asList("jim,bob,joe,tom,wolfgang".split(","))
+        return (args) -> Arrays.asList("jim,bob,joe,tom,wolfgang".split(","))
                         .forEach(
                                 a -> {
                                     Account account = accountRepository.save(new Account(a, "password"));
                                     bookmarkRepository.save(new Bookmark(account, "http://bookmark.com/1/" + a, "A description"));
-                                    bookmarkRepository.save(new Bookmark(account, "http://bookmark.com/2/" + a, "Another description"));
+                                    bookmarkRepository.save(new Bookmark(account, "http://bookmark.com/2/" + a, "A description"));
                                 }
                         );
     }
