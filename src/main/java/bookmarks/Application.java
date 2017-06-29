@@ -1,21 +1,62 @@
 package bookmarks;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
  * Created by eric on 6/28/17.
  */
 
+// curl -X POST -vu android-bookmarks:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=password&username=bob&grant_type=password&scope=write&client_secret=123456&client_id=android-bookmarks"
+// curl -v POST http://127.0.0.1:8080/bookmarks -H "Authorization: Bearer <oauth_token>""
+
 @SpringBootApplication
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
+
+    //allow XSS for well-known clients by exposing CORS (cross-origin request scripting) headers
+    //origin could just as easily come from database
+    @Bean
+    FilterRegistrationBean corsFilter(@Value("${tagit.origin:http://localhost:9000}") String origin) {
+        return new FilterRegistrationBean(new Filter() {
+            public void doFilter(ServletRequest req,
+                                 ServletResponse res,
+                                 FilterChain chain  ) throws IOException, ServletException {
+                HttpServletRequest request = (HttpServletRequest) req;
+                HttpServletResponse response = (HttpServletResponse) res;
+                String method = request.getMethod();
+
+                response.setHeader("Access-Control-Allow-Origin", origin);
+                response.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,DELETE");
+                response.setHeader("Access-Control-Max-Age", Long.toString(60 * 60));
+                response.setHeader("Access-Control-Allow-Credentials", "true");
+                response.setHeader("Access-Control-Allow-Headers", "Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization");
+
+                if ("OPTIONS".equals(method)) {
+                    response.setStatus(HttpStatus.OK.value());
+                } else {
+                    chain.doFilter(req, res);
+                }
+            }
+
+            public void init(FilterConfig filterConfig) {}
+            public void destroy() {}
+        });
+    }
+
 
     /*CommandLineRunner is an interface with one abstract method,
      *so it can be given a callback to implement that method.

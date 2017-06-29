@@ -4,7 +4,7 @@ A bookmark storage service with a HATEOAS-compliant REST API.
 Made with Spring Boot, HATEOAS, and Data JPA; utilizing an H2 database for storage, JUnit for testing, and Maven for build/run scripts.
 
 ### To Run:
-In a terminal, call ```mvn clean spring-boot:run``` to build and run the server.
+In a terminal, call ```keytool -genkey -alias bookmarks -keyalg RSA -keystore src/main/resources/tomcat.keystore``` to generate a keystore, then ```mvn clean spring-boot:run``` to build and run the server.
 
 ### Routes:
 GET ```http://localhost:8080/{username}/bookmarks```: returns a JSON of all bookmarks associated with ```{username}```.
