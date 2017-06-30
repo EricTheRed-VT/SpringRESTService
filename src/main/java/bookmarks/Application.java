@@ -18,7 +18,7 @@ import java.util.Arrays;
  * Created by eric on 6/28/17.
  */
 
-// curl -X POST -vu android-bookmarks:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=password&username=bob&grant_type=password&scope=write&client_secret=123456&client_id=android-bookmarks"
+// curl -X POST -vu android-bookmarks:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=password&username=jlong&grant_type=password&scope=write&client_secret=123456&client_id=android-bookmarks"
 // curl -v POST http://127.0.0.1:8080/bookmarks -H "Authorization: Bearer <oauth_token>""
 
 @SpringBootApplication
@@ -66,7 +66,7 @@ public class Application {
     @Bean
     CommandLineRunner init(AccountRepository accountRepository,
                            BookmarkRepository bookmarkRepository) {
-        return (args) -> Arrays.asList("jim,bob,joe,tom,wolfgang".split(","))
+        return (evt) -> Arrays.asList("jhoeller,dsyer,pwebb,ogierke,rwinch,mfisher,mpollack,jlong".split(","))
                         .forEach(
                                 a -> {
                                     Account account = accountRepository.save(new Account(a, "password"));
